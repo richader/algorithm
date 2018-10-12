@@ -1,2 +1,2 @@
 # exercise
-my exercise code
+my exercise code for c++ on language or algorithm
