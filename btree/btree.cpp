@@ -74,6 +74,24 @@ Node* BTree::Find(const int val){
     return nullptr;
 }
 
+Node* BTree::GetMaxValue(){
+    Node* node = root_;
+    while(node && node->right){
+        node=node->right;
+    }
+
+    return node;
+}
+
+Node* BTree::GetMinValue(){
+    Node* node = root_;
+    while(node && node->left){
+        node = node->left;
+    }
+
+    return node;
+}
+
 
 }
 }

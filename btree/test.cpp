@@ -21,5 +21,7 @@ int main(int argc, char const *argv[])
 
     cout<< "Find 3 should be true:" << (tree.Find(3) != nullptr)<<endl;
     cout<< "Find 6 should be false:" << (tree.Find(6) != nullptr)<<endl;
+    cout<< "min value is:"<< tree.GetMinValue()->GetValue()<<endl;
+    cout<< "max value is:"<< tree.GetMaxValue()->GetValue()<<endl;
     return 0;
 }

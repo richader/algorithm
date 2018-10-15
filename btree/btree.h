@@ -11,6 +11,7 @@ class BTree;
 class Node{
 public:
     Node(const int val):val_(val){};
+    int GetValue(){ return val_;}
 private:
     friend class BTree;
     Node* left;
