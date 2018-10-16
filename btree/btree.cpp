@@ -149,7 +149,7 @@ void BTree::PrintTree(){
                 nQueue.push(tmp->left);
                 nQueue.push(tmp->right);
             }else{
-                std::cout<<"0";
+                std::cout<<"null";
                 nQueue.push(nullptr);
                 nQueue.push(nullptr);
             }
