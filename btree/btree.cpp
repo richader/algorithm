@@ -1,5 +1,8 @@
 #include "btree.h"
 
+#include <queue>
+#include <iostream>
+
 namespace exercise{
 namespace btree{
 
@@ -92,6 +95,80 @@ Node* BTree::GetMinValue(){
     return node;
 }
 
+bool BTree::IsComplete(){
+    std::queue<Node*> nQueue;
+    if(root_ == nullptr){
+        return true;
+    }
+
+    nQueue.push(root_);
+    Node* tmp=nullptr;
+    bool leaf=false;
+    do{
+        tmp=nQueue.front();
+        nQueue.pop();
+
+        if((tmp->left == nullptr) && (tmp->right!=nullptr)){
+            return false;
+        }
+
+        if(leaf && (tmp->left != nullptr || tmp->right != nullptr)){
+            return false;
+        }
+
+        if(tmp->left==nullptr){
+            leaf = true;
+        }else if(tmp->right == nullptr){
+            leaf = true;
+        }
+
+        if(tmp->left) nQueue.push(tmp->left);
+        if(tmp->right) nQueue.push(tmp->right);
+    }while(nQueue.size()>0);
+    return true;
+}
+
+void BTree::PrintTree(){
+    int deep=GetDeep(root_);
+    std::queue<Node*> nQueue;
+    if(root_ == nullptr){
+        return;
+    }
+
+    nQueue.push(root_);
+
+    Node* tmp = nullptr;
+
+    for(int level=0;level<deep;++level){
+        int size=nQueue.size();
+        for(int i=0;i<size;++i){
+            std::cout<<level<<","<<i<<":";
+            tmp = nQueue.front();
+            if(tmp !=nullptr){
+                std::cout<<tmp->val_;
+                nQueue.push(tmp->left);
+                nQueue.push(tmp->right);
+            }else{
+                std::cout<<"0";
+                nQueue.push(nullptr);
+                nQueue.push(nullptr);
+            }
+            std::cout<<std::endl;
+            nQueue.pop();
+        }
+        std::cout<<std::endl;
+    }
+}
+
+int BTree::GetDeep(Node* node){
+    if(node == nullptr){
+        return 0;
+    }
+
+    int ldeep=GetDeep(node->left);
+    int rdeep=GetDeep(node->right);
+    return 1+(ldeep>rdeep?ldeep:rdeep);
+}
 
 }
 }

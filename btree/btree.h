@@ -27,9 +27,13 @@ public:
     Node* Find(const int val);
     Node* GetMinValue();
     Node* GetMaxValue();
+    bool IsComplete();
+    void PrintTree();
+    int Deep(){return GetDeep(root_);}
 private:
     //递归删除二叉树，为减少函数调用，传入的参数不能为空。
     void DeleteTree(Node* node);
+    int GetDeep(Node* node);
     Node* root_;
 };
 }
