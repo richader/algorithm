@@ -42,24 +42,70 @@ bool BTree::Insert(const int val){
     Node* tmp = root_;
     do{
         if(val <= tmp->val_){
-            if(tmp->left){
-                tmp=tmp->left;
-                continue;
-            }else{
+            if(tmp->left == NULL){
                 tmp->left = node;
                 return true;
             }
+            tmp = tmp->left;
         }else{
-            if(tmp->right){
-                tmp=tmp->right;
-                continue;
-            }else{
+            if(tmp->right == NULL){
                 tmp->right = node;
                 return true;
             }
+            tmp = tmp->right;
         }
     }while(true);
     return true;
+}
+
+void BTree::Delete(const int val){
+    Node* node = root_;
+    Node* parent = nullptr;
+    while(node){
+        if (node->val_ == val)
+        {
+            break;
+        }else if (node->val_ < val)
+        {
+            parent=node;
+            node = node->left;
+        }else{
+            parent=node;
+            node = node->right;
+        }
+    }
+
+    if(node && node->val_ == val){
+        if(parent == nullptr){
+            delete root_;
+            root_ = nullptr;
+            return;
+        }
+
+        if (node->left == nullptr || node->right == nullptr)
+        {
+            if(parent->left == node){
+                parent->left = ((node->left== nullptr)?node->right : node->left);
+            }else{
+                parent->right = ((node->left == nullptr)?node->right : node->left);
+            }
+            delete node;
+        }else{
+            Node* minRight = node->right;
+            while(minRight->left){
+                minRight = minRight->left;
+            }
+            minRight->left = node->left;
+
+            if(parent->left == node){
+                parent->left = node->right;
+            }else{
+                parent->right = node->right;
+            }
+
+            delete node;
+        }
+    }
 }
 
 Node* BTree::Find(const int val){
@@ -98,7 +144,7 @@ Node* BTree::GetMinValue(){
 bool BTree::IsComplete(){
     std::queue<Node*> nQueue;
     if(root_ == nullptr){
-        return true;
+        return false;
     }
 
     nQueue.push(root_);
@@ -106,7 +152,6 @@ bool BTree::IsComplete(){
     bool leaf=false;
     do{
         tmp=nQueue.front();
-        nQueue.pop();
 
         if((tmp->left == nullptr) && (tmp->right!=nullptr)){
             return false;
@@ -115,13 +160,12 @@ bool BTree::IsComplete(){
         if(leaf && (tmp->left != nullptr || tmp->right != nullptr)){
             return false;
         }
-
-        if(tmp->left==nullptr){
-            leaf = true;
-        }else if(tmp->right == nullptr){
+        
+        if(tmp->right == nullptr){
             leaf = true;
         }
 
+        nQueue.pop();
         if(tmp->left) nQueue.push(tmp->left);
         if(tmp->right) nQueue.push(tmp->right);
     }while(nQueue.size()>0);
