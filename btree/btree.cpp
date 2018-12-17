@@ -214,5 +214,36 @@ int BTree::GetDeep(Node* node){
     return 1+(ldeep>rdeep?ldeep:rdeep);
 }
 
+
+Node* BTree::GetFloor(const int val){
+    Node* result = nullptr;
+    Node* node = root_;
+    while(node){
+        if(node->val>val){
+            node= node->left;
+        }else if(node->val<val){
+            if (result == null || result.val < node.val)
+                result = node;
+            node = node->right;
+        }else{
+            return node;
+        }
+    }
+}
+Node* BTree::GetCeiling(const int val){
+    Node* result = nullptr;
+    Node* node = root_;
+    while(node){
+        if(node->val>val){
+            if (result == null || result.val > node.val)
+                result = node;
+            node= node->left;
+        }else if(node->val<val){
+            node = node->right;
+        }else{
+            return node;
+        }
+    }
+}
 }
 }

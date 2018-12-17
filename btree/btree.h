@@ -28,6 +28,8 @@ public:
     Node* Find(const int val);
     Node* GetMinValue();
     Node* GetMaxValue();
+    Node* GetFloor(const int val);
+    Node* GetCeiling(const int val);
     bool IsComplete();
     void PrintTree();
     int Deep(){return GetDeep(root_);}
