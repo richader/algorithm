@@ -77,8 +77,19 @@ void BTree::Delete(const int val){
 
     if(node && node->val_ == val){
         if(parent == nullptr){
+            if (node->left == nullptr || node->right == nullptr)
+            {
+                parent = (node->left == nullptr)?node->right:node->left;
+            }else{                
+                Node* minRight = node->right;
+                while(minRight->left){
+                    minRight = minRight->left;
+                }
+                minRight->left = node->left;
+                parent = node->right;
+            }
             delete root_;
-            root_ = nullptr;
+            root_ = parent;
             return;
         }
 
@@ -96,6 +107,7 @@ void BTree::Delete(const int val){
                 minRight = minRight->left;
             }
             minRight->left = node->left;
+
 
             if(parent->left == node){
                 parent->left = node->right;
