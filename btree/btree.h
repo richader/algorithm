@@ -25,6 +25,7 @@ public:
     ~BTree();
     bool Insert(const int val);
     void Delete(const int val);
+    Node* RemoveMinNode(Node* n);
     Node* Find(const int val);
     Node* GetMinValue();
     Node* GetMaxValue();

@@ -75,50 +75,40 @@ void BTree::Delete(const int val){
         }
     }
 
+    Node* tmp =nullptr;
     if(node && node->val_ == val){
-        if(parent == nullptr){
-            if (node->left == nullptr || node->right == nullptr)
-            {
-                parent = (node->left == nullptr)?node->right:node->left;
-            }else{                
-                Node* minRight = node->right;
-                while(minRight->left){
-                    minRight = minRight->left;
-                }
-                minRight->left = node->left;
-                parent = node->right;
-            }
-            delete root_;
-            root_ = parent;
-            return;
-        }
-
         if (node->left == nullptr || node->right == nullptr)
         {
-            if(parent->left == node){
-                parent->left = ((node->left== nullptr)?node->right : node->left);
-            }else{
-                parent->right = ((node->left == nullptr)?node->right : node->left);
-            }
-            delete node;
+            tmp = (node->left == nullptr)?node->right:node->left;
         }else{
             Node* minRight = node->right;
+            Node* minParent = node;
             while(minRight->left){
+                minParent = minRight;
                 minRight = minRight->left;
             }
-            minRight->left = node->left;
-
-
-            if(parent->left == node){
-                parent->left = node->right;
-            }else{
-                parent->right = node->right;
+            if(minParent->left == minRight){
+                minParent->left = nullptr;
             }
-
-            delete node;
+            minRight->left = node->left;
+            minRight->right = node->right;
         }
+
+        if(parent != nullptr){
+            if (parent->left == node)
+            {
+                parent->left = tmp;
+            }else{
+                parent->right = tmp;
+            }
+        }else{
+            root_ = tmp;
+        }
+
+        delete node;
     }
 }
+
 
 Node* BTree::Find(const int val){
     Node* node = root_;
@@ -231,10 +221,10 @@ Node* BTree::GetFloor(const int val){
     Node* result = nullptr;
     Node* node = root_;
     while(node){
-        if(node->val>val){
+        if(node->val_ > val){
             node= node->left;
-        }else if(node->val<val){
-            if (result == null || result.val < node.val)
+        }else if(node->val_ < val){
+            if (result == nullptr || result->val_ < node->val_)
                 result = node;
             node = node->right;
         }else{
@@ -246,11 +236,11 @@ Node* BTree::GetCeiling(const int val){
     Node* result = nullptr;
     Node* node = root_;
     while(node){
-        if(node->val>val){
-            if (result == null || result.val > node.val)
+        if(node->val_ > val){
+            if (result == nullptr || result->val_ > node->val_)
                 result = node;
             node= node->left;
-        }else if(node->val<val){
+        }else if(node->val_ < val){
             node = node->right;
         }else{
             return node;
